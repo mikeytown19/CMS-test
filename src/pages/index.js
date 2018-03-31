@@ -1,74 +1,82 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from "react";
 import Link from 'gatsby-link'
+import BasicContent from '../components/Basic-Content'
+import TwoColumn from '../components/2column'
 
-export default class IndexPage extends React.Component {
+
+
+
+
+export default class IndexPage extends Component {
   render() {
-    const { data } = this.props
-    const { edges: posts } = data.allMarkdownRemark
+
 
     return (
-      <section className="section">
-        <div className="container">
-          <div className="content">
-            <h1 className="has-text-weight-bold is-size-2">Latest Stories</h1>
-          </div>
-          {posts
-            .filter(post => post.node.frontmatter.templateKey === 'blog-post')
-            .map(({ node: post }) => (
-              <div
-                className="content"
-                style={{ border: '1px solid #eaecee', padding: '2em 4em' }}
-                key={post.id}
-              >
-                <p>
-                  <Link className="has-text-primary" to={post.fields.slug}>
-                    {post.frontmatter.title}
-                  </Link>
-                  <span> &bull; </span>
-                  <small>{post.frontmatter.date}</small>
-                </p>
-                <p>
-                  {post.excerpt}
-                  <br />
-                  <br />
-                  <Link className="button is-small" to={post.fields.slug}>
-                    Keep Reading →
-                  </Link>
-                </p>
-              </div>
-            ))}
-        </div>
+      <section className="">
+
+        <BasicContent switches="large-padding text-center"
+          content={()=>{
+            return (
+              <section>
+                <div>
+                  <h1 className="has-text-weight-bold">Hi, Welcome to my website. </h1>
+                </div>
+                <button className="button-secondary shit" style={{ marginBottom: '40px'}}>
+                      Learn More
+                </button>
+              </section>
+            )
+          }} >
+        </BasicContent>
+
+        <TwoColumn
+         switches="large-padding bg-primary-gray"
+         colSize1="six"
+         colSize2="six"
+         before={()=>{
+          return (
+            <section className="">
+             <h2 className="color-white">Before Content</h2>
+             <br/>
+            </section>
+          )
+        }}
+          content1={()=>{
+            return (
+              <section className="text-center">
+               <button className="button-secondary shit" style={{ marginBottom: '40px'}}>
+                      Learn More
+                </button>
+              </section>
+            )
+          }}
+          content2={()=>{
+            return (
+              <section className="text-center">
+               <button className="button-secondary shit" style={{ marginBottom: '40px'}}>
+                      Learn More 2
+                </button>
+              </section>
+            )
+          }}
+          after={()=>{
+            return (
+              <section className="">
+
+
+               <h2 className="color-white">After Content</h2>
+
+              </section>
+            )
+          }}
+          >
+
+
+        </TwoColumn>
+
+
       </section>
     )
   }
 }
 
-IndexPage.propTypes = {
-  data: PropTypes.shape({
-    allMarkdownRemark: PropTypes.shape({
-      edges: PropTypes.array,
-    }),
-  }),
-}
-
-export const pageQuery = graphql`
-  query IndexQuery {
-    allMarkdownRemark(sort: { order: DESC, fields: [frontmatter___date] }) {
-      edges {
-        node {
-          excerpt(pruneLength: 400)
-          id
-          fields {
-            slug
-          }
-          frontmatter {
-            title
-            templateKey
-            date(formatString: "MMMM DD, YYYY")
-          }
-        }
-      }
-    }
-  }
-`

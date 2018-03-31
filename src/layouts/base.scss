@@ -1,0 +1,590 @@
+
+$primary-font: 'DIN Next W01', Gotham, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$white: #ffffff;
+
+$primary: #1a9fef; // blue
+$primary-dark: #1e50b1; // dark blue
+$secondary: #ffd700; // yellow
+$secondary-dark: #f5af3d; // orangeish yellow
+$secondary-mid: #f28900;
+$alt: #04a289; // teal-ish green
+
+$darkgray: #2f2f37;
+$lightgray: #f3f4f5;
+$error: #b30a3c;
+
+$primary-blue: #009fe3;
+$blue2: #02b0fb;
+$blue3: #0187c1;
+$blue2: #016691;
+
+$primary-green: #bed733;
+$green2: #dcf744;
+$green3: #99af21;
+$green2: #6d7e11;
+
+$primary-gray: #202e39;
+$gray2: #384d5e;
+$gray3: #0f1a23;
+$gray2: #070d12;
+
+$dark: #2a2c2b;
+$dark2: #7d8086;
+
+$white: #fff;
+$white2: #f6f6f6;
+$white3: #e1e3e7;
+$white4: #cbcdd1;
+
+$accent-orange: #ee8201;
+$orange2: #ffdb7c;
+$orange3: #cf4520;
+$orange4: #85090f;
+
+$accent-teal: #00b1aa;
+$teal2: #7dded2;
+$teal3: #00857d;
+$teal4: #004655;
+
+$accent-purple: #c5569b;
+$purple2: #e1c5de;
+$purple3: #860166;
+$purple4: #501a53;
+
+$font-size: 16;
+
+
+//// define global padding ////
+$padding: (
+  desktop: (
+    large: 54px,
+    medium: 30px,
+    small: 15px
+  ),
+  tablet: (
+    large: 54px,
+    medium: 24px,
+    small: 15px
+  ),
+  mobile: (
+    large: 40px,
+    medium: 24px,
+    small: 15px
+  )
+);
+
+// ==================================================
+// px -> rem font conversion
+// ==================================================
+@mixin font-size($size) { font-size: ($size / 16px) * 1rem; }
+
+// ==================================================
+// @font-face mixin
+// ==================================================
+@mixin font-face($name, $path, $weight: 400, $style: normal, $extensions: ('eot', 'woff2', 'woff', 'ttf')) {
+  $format-strings: (
+    'otf': 'opentype',
+    'ttf': 'truetype',
+  );
+
+  $source: null;
+
+  @each $extension in $extensions {
+    $format: if(map-has-key($format-strings, $extension), map-get($format-strings, $extension), $extension);
+    $extension: if($extension == 'eot', $extension + '?', $extension);
+    $source: append($source, url(quote($path + '.' + $extension)) format(quote($format)), comma);
+  }
+
+  $name: quote($name);
+
+  @font-face {
+    font-family: $name;
+    font-style: $style;
+    font-weight: $weight;
+    src: $source;
+  }
+}
+
+@mixin transition($transition...) {
+  -moz-transition:    $transition;
+  -o-transition:      $transition;
+  -webkit-transition: $transition;
+  transition:         $transition;
+}
+@mixin transition-property($property...) {
+  -moz-transition-property:    $property;
+  -o-transition-property:      $property;
+  -webkit-transition-property: $property;
+  transition-property:         $property;
+}
+@mixin transition-duration($duration...) {
+  -moz-transition-property:    $duration;
+  -o-transition-property:      $duration;
+  -webkit-transition-property: $duration;
+  transition-property:         $duration;
+}
+@mixin transition-timing-function($timing...) {
+  -moz-transition-timing-function:    $timing;
+  -o-transition-timing-function:      $timing;
+  -webkit-transition-timing-function: $timing;
+  transition-timing-function:         $timing;
+}
+@mixin transition-delay($delay...) {
+  -moz-transition-delay:    $delay;
+  -o-transition-delay:      $delay;
+  -webkit-transition-delay: $delay;
+  transition-delay:         $delay;
+}
+// ==================================================
+// SVG icon
+// ==================================================
+@mixin icon($icon, $fill: map-get($icon-settings, fill), $height: map-get($icon-settings, height), $width: map-get($icon-settings, width), $view-box: map-get($icon-settings, view-box)) {
+  @if map-has-key($icons, $icon) {
+    width: $width;
+    height: $height;
+    background-image: encode-svg('<svg xmlns="http://www.w3.org/2000/svg" fill="#{$fill}" viewBox="#{$view-box}">#{map-get($icons, $icon)}</svg>');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    content: '';
+  } @else {
+    @warn 'Could not find #{$icon} in the $icons map.'
+  }
+}
+
+// ==================================================
+// Primary Cuttlefish Breakpoint Mixins
+// ==================================================
+
+@mixin small {
+  @media screen and (min-width: 0px) and (max-width: 640px) {
+    @content;
+  }
+}
+
+@mixin medium {
+  @media screen and (min-width: 641px) and (max-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin medium-up {
+  @media screen and (min-width: 641px) {
+    @content;
+  }
+}
+
+@mixin medium-down {
+  @media screen and (max-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin large {
+  @media screen and (min-width: 1025px) and (max-width: 1440px) {
+    @content;
+  }
+}
+
+@mixin large-up {
+  @media screen and (min-width: 1025px) {
+    @content;
+  }
+}
+
+@mixin xlarge {
+  @media screen and (min-width: 1441px) and (max-width: 1920px) {
+    @content;
+  }
+}
+
+@mixin xxlarge {
+  @media screen and (min-width: 1921px) {
+    @content;
+  }
+}
+
+// ==================================================
+// Secondary Cuttlefish Breakpoint Mixins
+// ==================================================
+
+@mixin portrait-tablet {
+  @media screen and (min-width: 641px) and (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin landscape-tablet {
+  @media screen and (min-width: 769px) and (max-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin small-phone {
+  @media screen and (min-width: 0px) and (max-width: 320px) {
+    @content;
+  }
+}
+
+@mixin medium-phone {
+  @media screen and (min-width: 321px) and (max-width: 375px) {
+    @content;
+  }
+}
+
+@mixin large-phone {
+  @media screen and (min-width: 376px) and (max-width: 425px) {
+    @content;
+  }
+}
+
+@mixin xlarge-phone {
+  @media screen and (min-width: 426px) and (max-width: 640px) {
+    @content;
+  }
+}
+
+
+@function get-padding($screen: desktop, $size: large) {
+  @return map-get(map-get($padding, $screen), $size);
+}
+
+@mixin set-padding($size: large, $sides: false) {
+  @if ($sides == true) { // has padding on sides
+    padding: get-padding(mobile, $size);
+
+    @include medium {
+      padding: get-padding(tablet, $size);
+    }
+
+    @include large-up {
+      padding: get-padding(desktop, $size);
+    }
+
+  } @else { // no padding on sides
+    padding: get-padding(mobile, $size) 0;
+
+    @include medium {
+      padding: get-padding(tablet, $size) 0;
+    }
+
+    @include large-up {
+      padding: get-padding(desktop, $size) 0;
+    }
+  }
+
+}
+
+@mixin padding-full($top, $right, $bottom, $left) {
+  padding-top: $top;
+  padding-right: $right;
+  padding-bottom: $bottom;
+  padding-left: $left;
+}
+
+@mixin margin-full($top, $right, $bottom, $left) {
+  margin-top: $top;
+  margin-right: $right;
+  margin-bottom: $bottom;
+  margin-left: $left;
+}
+
+// Add queries for 1200px - needed for tabbed component
+@mixin medium-full {
+  @media screen and (min-width: 641px) and (max-width: 1200px) {
+    @content;
+  }
+}
+
+// query for between tablet and full width - needed for tab pricing
+@mixin large-gap {
+  @media screen and (min-width: 1024px) and (max-width: 1200px) {
+    @content;
+  }
+}
+
+@mixin full-up {
+  @media screen and (min-width: 1200px) {
+    @content;
+  }
+}
+
+@mixin extra-small {
+  @media screen and (max-width: 460px) {
+    @content;
+  }
+}
+
+@mixin short {
+  @media screen and (max-height: 768px) {
+    @content;
+  }
+}
+
+// container switches
+.large-padding {
+  @include set-padding;
+}
+
+.large-padding-full {
+  @include set-padding(large, true);
+}
+
+.medium-padding {
+  @include set-padding(medium);
+}
+
+.medium-padding-full {
+  @include set-padding(medium, true);
+}
+
+.small-padding {
+  @include set-padding(small);
+}
+
+.small-padding-full {
+  @include set-padding(small, true);
+}
+
+.small-only-margin-top {
+  margin-top: 30px;
+
+  @include medium-up {
+    margin-top: 0;
+  }
+}
+
+:root:root .no-padding {
+  padding: 0;
+}
+
+:root:root .no-padding-top {
+  padding-top: 0;
+}
+
+:root:root .no-padding-bottom {
+  padding-bottom: 0;
+}
+
+:root:root .no-margin {
+  margin: 0;
+}
+
+:root:root .no-padding-mobile {
+  @include small {
+    padding: 0;
+  }
+}
+
+.no-row-margin {
+  .row {
+    margin: 0;
+  }
+}
+
+//// end global padding ////
+
+// TODO figure out how to do this without using pixels for base font size
+@function em($pixels, $context: $font-size) {
+  @return #{$pixels / $context}em;
+}
+
+html,
+body {
+  height: 100%;
+  //overflow-y: auto;
+  -webkit-overflow-scrolling: touch; // fixes iOS iFrame issue
+
+  @include medium-down {
+    //overflow-y: auto;
+  }
+}
+
+body {
+  background-color: $white;
+  color: $darkgray;
+  font-family: $primary-font;
+  font-size: em(18);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.4em;
+}
+
+::selection {
+  background-color: $alt;
+  color: $white;
+}
+
+[type=number]::-webkit-inner-spin-button,
+[type=number]::-webkit-outer-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+a {
+  color: $primary;
+
+  &:hover {
+    color: $primary-dark;
+  }
+
+  &.no-line {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// p {
+//   padding-bottom: 14px;
+// }
+
+iframe {
+  border: 0;
+}
+
+// headers
+h1 {
+  margin-bottom: 18px;
+  font-size: em(30);
+  font-weight: normal;
+  line-height: 1.2em;
+
+  @include medium {
+    font-size: em(35);
+    line-height: 1.2em;
+  }
+
+  @include large-up {
+    font-size: em(40);
+    line-height: 1.2em;
+  }
+}
+
+h2 {
+  margin-bottom: 14px;
+  font-size: em(26);
+  font-weight: normal;
+  line-height: 1.3em;
+
+  @include medium-up {
+    font-size: em(32);
+    line-height: 1.2em;
+  }
+}
+
+.h2-style-light {
+  margin-bottom: 14px;
+  padding-bottom: 0;
+  font-size: em(20);
+  font-weight: 100;
+  line-height: 1.3em;
+
+  @include medium-up {
+    font-size: em(20);
+    line-height: 1.2em;
+  }
+}
+
+h3 {
+  margin-bottom: 14px;
+  font-size: em(20);
+  font-weight: normal;
+  line-height: 1.2em;
+
+  @include medium-up {
+    font-size: em(22);
+    line-height: 1.2em;
+  }
+
+  &.no-padding-bottom {
+    padding-bottom: 0;
+  }
+}
+
+h4 {
+  margin-bottom: 14px;
+  font-size: em(21);
+  font-weight: normal;
+  line-height: 1.2em;
+}
+
+h5 {
+  margin-bottom: 10px;
+  font-size: em(18);
+  font-weight: normal;
+  line-height: 1.2em;
+}
+
+ul,
+ol {
+  padding-bottom: 6px;
+  padding-left: 20px;
+
+  li {
+    padding-bottom: 8px;
+  }
+}
+
+.color-primary {
+  color: $primary;
+}
+
+.color-secondary {
+  color: $secondary;
+
+  a {
+    color: $secondary;
+  }
+}
+
+
+button {
+  display: inline-block;
+  height: 38px;
+  padding: 0 30px;
+  color: #555;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 38px;
+  letter-spacing: .1rem;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: $white;
+  border-radius: 4px;
+  border: 1px solid #bbb;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: 1;
+  @include transition(background-color .2s, color .4s, border .2s);
+
+  &:hover {
+    background-color: $primary-gray;
+    color: $white;
+    border: 1px solid $primary-gray ;
+
+    cursor: pointer;
+  }
+}
+
+.text-center {
+  text-align: center;
+}
+
+.bg-primary-gray {
+  background-color: $primary-gray
+}
+
+.color-white {
+  color: $white;
+}
+
+.component {
+  max-width: 960px;
+  margin: auto;
+}
+
+
+
