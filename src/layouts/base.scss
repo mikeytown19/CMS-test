@@ -2,7 +2,7 @@
 $primary-font: 'DIN Next W01', Gotham, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 $white: #ffffff;
 
-$primary: #1a9fef; // blue
+$primary: #C70918; // blue
 $primary-dark: #1e50b1; // dark blue
 $secondary: #ffd700; // yellow
 $secondary-dark: #f5af3d; // orangeish yellow
@@ -543,7 +543,7 @@ button {
   display: inline-block;
   height: 38px;
   padding: 0 30px;
-  color: #555;
+  color: $white;
   text-align: center;
   font-size: 11px;
   font-weight: 600;
@@ -552,9 +552,9 @@ button {
   text-transform: uppercase;
   text-decoration: none;
   white-space: nowrap;
-  background-color: $white;
+  background-color: $primary;
   border-radius: 4px;
-  border: 1px solid #bbb;
+  border: 1px solid $primary;
   cursor: pointer;
   box-sizing: border-box;
   transition: 1;
@@ -573,6 +573,10 @@ button {
   text-align: center;
 }
 
+.text-left {
+  text-align: left;
+}
+
 .bg-primary-gray {
   background-color: $primary-gray
 }
@@ -584,6 +588,10 @@ button {
 .component {
   max-width: 960px;
   margin: auto;
+}
+
+.primary {
+  color: $primary;
 }
 
 
